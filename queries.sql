@@ -78,5 +78,10 @@ create table test (
     modified_at timestamp not null default current_timestamp on update current_timestamp
 );
 
-alter table test add column price float not null default 0; /* add column to test table */
+alter table test add column price float first; /* add column to test table at the first position */
+alter table test add column price float after name; /* add column to test table after name column */
 alter table test drop column price; /* drop column from test table */
+alter table test modify column name varchar(200) not null; /* modify column from test table */
+alter table test modify price decimal(10, 2) not null default 0; /* modify column price from test table to decimal(10, 2) and set default value to 0 */
+alter table test rename column price to prices; /* rename column price from test table to prices, the type should be the same */
+alter table test rename to test_new; /* rename table from test to test_new */

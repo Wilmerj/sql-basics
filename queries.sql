@@ -52,6 +52,12 @@ CREATE TABLE if not exists bill_products (
         on delete cascade
 );
 
+CREATE TABLE investment (
+    id int unsigned primary key auto_increment,
+    product_id int unsigned not null,
+    investment int not null default 0
+);
+
 /* clients table */
 insert into clients (name, email, phone_number) values ('Wilmeriano', 'wilmeriano@gmail.com', '1234567890');
 
@@ -151,3 +157,7 @@ CREATE USER 'platzi'@'localhost' IDENTIFIED BY '123456';
 GRANT ALL PRIVILEGES ON *.* TO 'platzi'@'localhost';
 FLUSH PRIVILEGES;
 exit;
+
+/* investment table */
+select * from investment;
+insert into investment (product_id, investment) select id, stock * price from products;

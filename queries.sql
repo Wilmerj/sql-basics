@@ -66,6 +66,11 @@ select * from clients limit 10;
 update clients set name = 'Wilmeriano mamarracho' where id = 10;
 select * from clients where id = 10;
 update clients set phone_number = null where name like 'wilmeriano%';
+alter table clients add column active tinyint not null default 1 after phone_number;
+select * from clients order by name asc limit 10;
+update clients set active = 0 where id = 164167;
+delete from clients where id = 69856 limit 1;
+select * from clients where id = 69856;
 
 /* products table */
 insert into products (name, slug, description) values ('Iphone 14', 'iphone-14', 'The latest iPhone from Apple') ON DUPLICATE KEY UPDATE description = concat(description, ' ', values(slug));
@@ -79,6 +84,35 @@ select name, price from products where price between 2000 and 2500;
 select * from products where name id = 8;
 alter table products add column stock int unsigned not null default 100;
 update products set stock = stock - 20 where id = 88;
+select name, stock, price * stock as total_value from products where price >= 100 and stock > 90 order by total_value asc limit 5, 10;
+select count(*) from products where price < 500;
+select sum(stock) from products;
+select avg(price) from products;
+select sum(price * stock) from products;
+select email, if(email like '%gmail.com%', 1, 0) as is_gmail, if(email like '%hotmail.com%', 1, 0) as is_hotmail from clients order by rand() limit 30;
+
+select email,
+    case
+        when email like '%gmail.com%' then 'gmail'
+        when email like '%hotmail.com%' then 'hotmail'
+        when email like '%yahoo.com%' then 'yahoo'
+        else 'other'
+    end as email_provider
+    from clients order by rand() limit 30;
+
+select
+    case
+        when email like '%gmail.com%' then 'gmail'
+        when email like '%hotmail.com%' then 'hotmail'
+        when email like '%yahoo.com%' then 'yahoo'
+        else 'other'
+    end as email_provider,
+    count(*) as total_clients
+from clients
+where name like 'a%'
+group by email_provider
+having total_clients > 100
+order by total_clients asc;
 
 /* bills table */
 insert into bills (client_id, total) values (1, 100.00);

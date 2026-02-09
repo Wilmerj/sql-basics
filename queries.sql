@@ -19,6 +19,8 @@ CREATE TABLE if not exists products (
     description text,
     created_at timestamp not null default current_timestamp,
     modified_at timestamp not null default current_timestamp on update current_timestamp
+    sku varchar(100),
+    price decimal(10, 2) not null default 0,
 );
 
 CREATE TABLE if not exists bills (
@@ -37,6 +39,9 @@ CREATE TABLE if not exists bill_products (
     bill_id int unsigned not null,
     product_id int unsigned not null,
     quantity int unsigned not null default 1,
+    date_added date not null default (current_date),
+    price float not null default 0,
+    discount float not null default 0,
     created_at timestamp not null default current_timestamp,
     modified_at timestamp not null default current_timestamp on update current_timestamp,
     foreign key (bill_id) references bills(id)
@@ -52,21 +57,35 @@ insert into clients (name, email, phone_number) values ('Wilmeriano', 'wilmerian
 
 describe clients;
 select * from clients;
-
 drop table clients;
+select name from clients where rand() < 0.01;
+select count(*) from clients;
+select * from clients where name like 'Mr.% III' or name like '%IV';
+select * from clients where name like '%Gibson%';
 
 /* products table */
-insert into products (name, slug, description) values ('Iphone 14', 'iphone-14', 'The latest iPhone from Apple');
+insert into products (name, slug, description) values ('Iphone 14', 'iphone-14', 'The latest iPhone from Apple') ON DUPLICATE KEY UPDATE description = concat(description, ' ', values(slug));
+insert into products (name, slug, description) values ('Iphone 15', 'iphone-15', 'The latest iPhone from Apple'),
 select * from products;
+select concat('The latest ', values(name), ' from ', values(slug)) from products;
+alter table products add column sku varchar(100);
+alter table products add column price decimal(10, 2) not null default 0;
+select count(*) from products;
+select name, price from products where price between 2000 and 2500;
 
 /* bills table */
 insert into bills (client_id, total) values (1, 100.00);
 select * from bills;
 delete from bills where id = 2;
+select count(*) from bills;
 
 /* bill_products table */
 insert into bill_products (bill_id, product_id, quantity) values (1, 1, 1);
 select * from bill_products;
+select count(*) from bill_products;
+select * from bill_products where discount > 0;
+select * from bill_products where date_added < '2024-09-10';
+select * from bill_products where date_added between '2024-09-10' and '2024-09-20';
 
 
 /* TEST ALTER COMMAND */
@@ -85,3 +104,9 @@ alter table test modify column name varchar(200) not null; /* modify column from
 alter table test modify price decimal(10, 2) not null default 0; /* modify column price from test table to decimal(10, 2) and set default value to 0 */
 alter table test rename column price to prices; /* rename column price from test table to prices, the type should be the same */
 alter table test rename to test_new; /* rename table from test to test_new */
+
+
+CREATE USER 'platzi'@'localhost' IDENTIFIED BY '123456';
+GRANT ALL PRIVILEGES ON *.* TO 'platzi'@'localhost';
+FLUSH PRIVILEGES;
+exit;

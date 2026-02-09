@@ -62,6 +62,10 @@ select name from clients where rand() < 0.01;
 select count(*) from clients;
 select * from clients where name like 'Mr.% III' or name like '%IV';
 select * from clients where name like '%Gibson%';
+select * from clients limit 10;
+update clients set name = 'Wilmeriano mamarracho' where id = 10;
+select * from clients where id = 10;
+update clients set phone_number = null where name like 'wilmeriano%';
 
 /* products table */
 insert into products (name, slug, description) values ('Iphone 14', 'iphone-14', 'The latest iPhone from Apple') ON DUPLICATE KEY UPDATE description = concat(description, ' ', values(slug));
@@ -72,6 +76,9 @@ alter table products add column sku varchar(100);
 alter table products add column price decimal(10, 2) not null default 0;
 select count(*) from products;
 select name, price from products where price between 2000 and 2500;
+select * from products where name id = 8;
+alter table products add column stock int unsigned not null default 100;
+update products set stock = stock - 20 where id = 88;
 
 /* bills table */
 insert into bills (client_id, total) values (1, 100.00);

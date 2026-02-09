@@ -160,4 +160,4 @@ exit;
 
 /* investment table */
 select * from investment;
-insert into investment (product_id, investment) select id, stock * price from products;
+insert into investment (product_id, investment) select id, stock * price from products; /* fill investment table with the product table data */

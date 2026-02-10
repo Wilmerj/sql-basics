@@ -161,3 +161,13 @@ exit;
 /* investment table */
 select * from investment;
 insert into investment (product_id, investment) select id, stock * price from products; /* fill investment table with the product table data */
+
+select p.id as product_id, p.name, p.price, stock, i.investment, round(i.investment / p.price, 2) as inventory_calculated,
+if(round(i.investment / p.price) = p.stock, 'perfect', 'not perfect') as perfect_inventory
+from investment as i
+left join products as p
+on i.product_id = p.id
+where i.investment > 100000
+limit 10;
+
+update products set stock = 90 where id = 20;

@@ -171,3 +171,28 @@ where i.investment > 100000
 limit 10;
 
 update products set stock = 90 where id = 20;
+
+select b.id, b.status, c.name,
+    count(bp.product_id) as number_of_products,
+    round(sum(p.price * bp.quantity * (1 - bp.discount / 100))) as total_price
+from bills as b
+left join clients as c
+    on b.client_id = c.id
+left join bill_products as bp
+    on b.id = bp.bill_id
+left join products as p
+    on bp.product_id = p.id
+group by b.id;
+
+select concat ('el cliente ', c.name, ' tiene ', count(bp.product_id), ' productos en la factura ', b.id, ' por un total de ', round(sum(p.price * bp.quantity * (1 - bp.discount / 100)))) as factura_details
+from bills as b
+left join clients as c
+    on b.client_id = c.id
+left join bill_products as bp
+    on b.id = bp.bill_id
+left join products as p
+    on bp.product_id = p.id
+group by b.id;
+
+
+select count(*) from bill_products where bill_id = 1;
